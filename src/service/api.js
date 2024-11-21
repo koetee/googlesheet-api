@@ -25,7 +25,7 @@ class ApiService {
       const response = await this.client.post('/auth/registration', {
          username: this.username,
       });
-      
+
       console.log('Пользователь успешно зарегистрирован.');
       return response.data.token;
    }
@@ -44,7 +44,7 @@ class ApiService {
 
    async getClients(token, limit = 1000, offset = 0) {
       try {
-         
+
          const response = await this.client.get('/clients', {
             headers: { Authorization: `${token}` },
             params: { limit, offset }
@@ -53,6 +53,37 @@ class ApiService {
       } catch (error) {
          throw new Error(`Ошибка при получении данных клиентов: ${error.message}`);
       }
+   }
+
+   async getClientsStatus(token, userIds) {
+      try {
+
+         const response = await this.client.post('/clients',
+            { userIds },
+            {
+               headers: { Authorization: `${token}` },
+            });
+         return response.data;
+      } catch (error) {
+         throw new Error(`Ошибка при получении данных клиентов: ${error.message}`);
+      }
+   }
+
+   async fetchClientsWithStatus(token) {
+      const clients = await this.getClients(token);
+
+      const userIds = clients.map(client => client.id);
+
+      const statuses = await this.getClientsStatus(token, userIds);
+      const statusMap = statuses.reduce((acc, status) => {
+         acc[status.id] = status.status;
+         return acc;
+      }, {});
+
+      return clients.map(client => ({
+         ...client,
+         status: statusMap[client.id] || 'Unknown' // Если статус отсутствует
+      }));
    }
 }
 

@@ -15,7 +15,7 @@ async function main() {
       const token = await api.init();
       
       console.log('Получение данных клиентов...');
-      const clients = await api.getClients(token);
+      const clients = await api.fetchClientsWithStatus(token);
 
       console.log('Подключение к Google Таблице...');
       await sheet.authorize();
