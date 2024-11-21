@@ -1,0 +1,17 @@
+{
+  "name": "nodejs-googlesheet-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/main.js",
+  "scripts": {
+    "start": "node ./src/main.js"
+  },
+  "author": "koete",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "google-auth-library": "^9.15.0",
+    "google-spreadsheet": "^4.1.4"
+  }
+}
